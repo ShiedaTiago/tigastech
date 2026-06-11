@@ -18,6 +18,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
@@ -29,11 +30,12 @@ body {
     linear-gradient(180deg, #04060b 0%, #050b14 38%, #04060b 100%);
   color: #f4f7fb;
   font-family: var(--font-body);
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 #root {
   min-height: 100vh;
+  overflow-x: clip;
 }
 
 ::selection {
@@ -129,6 +131,82 @@ body {
     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: 40px 40px;
+}
+
+.reveal-block {
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(2px);
+  transition:
+    opacity 420ms ease,
+    transform 420ms ease,
+    filter 420ms ease;
+  will-change: opacity, transform, filter;
+}
+
+.reveal-block[data-reveal="visible"] {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.reveal-block[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(2px);
+}
+
+.interactive-glow {
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease,
+    filter 220ms ease;
+}
+
+.interactive-glow:hover,
+.interactive-glow:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(255, 211, 59, 0.38);
+  box-shadow:
+    0 0 0 1px rgba(255, 211, 59, 0.2),
+    0 18px 52px rgba(0, 0, 0, 0.38),
+    0 0 28px rgba(25, 133, 255, 0.14);
+  filter: saturate(1.05);
+}
+
+.interactive-glow:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .title-display {
+    letter-spacing: 0.01em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal-block,
+  .interactive-glow {
+    transition: none;
+  }
+
+  .reveal-block {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .interactive-glow:hover,
+  .interactive-glow:focus-visible,
+  .interactive-glow:active {
+    transform: none;
+  }
 }
 
 @keyframes radar-rotate {

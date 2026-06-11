@@ -1,4 +1,5 @@
-﻿import {
+﻿import { useEffect, useRef, useState } from "react";
+import {
   ArrowRight,
   BadgeCheck,
   BellRing,
@@ -165,7 +166,7 @@ function SectionTitle({ eyebrow, title, subtitle, align = "center" }) {
 
 function ActionButton({ href, children, tone = "yellow", icon: Icon, className = "" }) {
   const base =
-    "inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold uppercase tracking-[0.16em] transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-400";
+    "interactive-glow inline-flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold uppercase tracking-[0.16em] transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-400 sm:w-auto";
   const tones = {
     yellow:
       "bg-gradient-to-r from-[#ffd31f] to-[#ffbf00] text-slate-950 shadow-[0_0_0_1px_rgba(255,210,35,0.3),0_16px_30px_rgba(255,199,33,0.22)] hover:-translate-y-0.5 hover:shadow-[0_0_0_1px_rgba(255,210,35,0.4),0_20px_36px_rgba(255,199,33,0.3)]",
@@ -185,7 +186,7 @@ function ActionButton({ href, children, tone = "yellow", icon: Icon, className =
 
 function StatCard({ value, label, icon: Icon }) {
   return (
-    <div className="glass-card glow-border flex items-center gap-4 rounded-2xl px-5 py-4 transition-transform duration-300 hover:-translate-y-1">
+    <div className="interactive-glow glass-card glow-border flex items-center gap-4 rounded-2xl px-5 py-4 transition-transform duration-300 hover:-translate-y-1">
       <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#ffc91a]/30 bg-[#ffc91a]/10 text-[#ffd335]">
         <Icon className="h-5 w-5" />
       </div>
@@ -199,7 +200,7 @@ function StatCard({ value, label, icon: Icon }) {
 
 function ServiceCard({ icon: Icon, title, text }) {
   return (
-    <article className="glass-card glow-border group rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
+    <article className="interactive-glow glass-card glow-border group rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
       <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-[#f0bf26]/25 bg-[#f0bf26]/10 text-[#ffd23f] transition-colors group-hover:bg-[#f0bf26]/16">
         <Icon className="h-7 w-7" />
       </div>
@@ -239,9 +240,46 @@ function Bar({ label, value, tone = "blue", suffix = "%" }) {
   );
 }
 
+function Reveal({ children, className = "", delay = 0 }) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.18,
+        rootMargin: "0px 0px -10% 0px",
+      }
+    );
+
+    observer.observe(node);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      data-reveal={visible ? "visible" : "hidden"}
+      style={{ transitionDelay: `${delay}ms` }}
+      className={`reveal-block ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+
 function PcIllustration() {
   return (
-    <div className="relative mx-auto flex w-full max-w-[560px] justify-center">
+    <div className="interactive-glow relative mx-auto flex w-full max-w-[560px] justify-center">
       <div className="absolute inset-x-12 bottom-0 h-24 rounded-full bg-blue-500/16 blur-3xl" />
       <div className="absolute right-8 top-12 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
       <div className="relative w-full max-w-[540px] pt-4">
@@ -263,14 +301,14 @@ function PcIllustration() {
 
 function PortraitPlaceholder() {
   return (
-    <div className="relative overflow-hidden rounded-[2rem] border border-cyan-400/10 bg-[linear-gradient(180deg,rgba(14,23,40,0.92),rgba(4,9,16,0.96))] p-4 sm:p-5">
+    <div className="interactive-glow relative overflow-hidden rounded-[2rem] border border-cyan-400/10 bg-[linear-gradient(180deg,rgba(14,23,40,0.92),rgba(4,9,16,0.96))] p-4 sm:p-5">
       <div className="absolute inset-0 floating-grid opacity-25" />
       <div className="absolute left-1/2 top-10 h-40 w-40 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(29,119,255,0.32),transparent_70%)] blur-2xl" />
       <div className="relative overflow-hidden rounded-[1.7rem] border border-white/8 bg-[linear-gradient(180deg,rgba(8,14,24,0.88),rgba(2,5,10,0.96))] shadow-[0_24px_70px_rgba(0,0,0,0.45)]">
         <img
           src="/tigas-photo.jpg"
           alt="Foto de Tigas Tech"
-          className="h-[420px] w-full object-cover object-[50%_18%] sm:h-[460px]"
+          className="h-[clamp(320px,84vw,460px)] w-full object-cover object-[50%_18%] sm:h-[460px]"
         />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(180deg,transparent,rgba(4,8,14,0.92))]" />
       </div>
@@ -344,23 +382,23 @@ function App() {
         </div>
       </header>
 
-      <main id="inicio" className="mx-auto max-w-[1400px] px-4 py-8 sm:px-6 lg:px-8">
+      <main id="inicio" className="mx-auto max-w-[1400px] overflow-x-clip px-4 py-8 sm:px-6 lg:px-8">
         <section className="grid items-center gap-10 pb-10 pt-4 lg:grid-cols-[1.02fr_0.98fr] lg:gap-8 lg:pb-16 lg:pt-10">
-          <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-400/8 px-4 py-2 text-xs font-bold uppercase tracking-[0.28em] text-cyan-200">
+          <Reveal className="space-y-8 min-w-0">
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-400/8 px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.24em] text-cyan-200 sm:text-xs sm:tracking-[0.28em]">
               <BellRing className="h-4 w-4 text-[#ffd23f]" />
               Assistência técnica especializada
             </div>
 
             <div className="space-y-5">
-              <h1 className="title-display max-w-4xl text-5xl font-extrabold uppercase leading-[0.92] tracking-[0.04em] text-white sm:text-6xl xl:text-[4.95rem]">
+              <h1 className="title-display max-w-4xl text-[clamp(2.7rem,10vw,4.95rem)] font-extrabold uppercase leading-[0.92] tracking-[0.03em] text-white sm:text-6xl">
                 TECNOLOGIA
                 <br />
                 QUE FUNCIONA.
                 <br />
                 <span className="text-[#ffcf1d] neon-text">DE VERDADE.</span>
               </h1>
-              <p className="max-w-xl text-lg leading-8 text-slate-300 sm:text-xl">
+              <p className="max-w-xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
                 Manutenção, upgrades e suporte técnico para computadores, notebooks e consoles.
               </p>
             </div>
@@ -373,117 +411,126 @@ function App() {
                 Ver serviços
               </ActionButton>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="relative">
+          <Reveal delay={120} className="relative">
             <div className="absolute -right-8 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-blue-500/12 blur-[110px]" />
             <PcIllustration />
-          </div>
+          </Reveal>
         </section>
 
         <section className="pb-10">
-          <div className="glass-card glow-border rounded-[2rem] p-4 sm:p-5">
-            <div className="grid gap-4 lg:grid-cols-4">
-              {stats.map((stat) => (
-                <StatCard key={stat.label} {...stat} />
-              ))}
+          <Reveal>
+            <div className="glass-card glow-border rounded-[2rem] p-4 sm:p-5">
+              <div className="grid gap-4 lg:grid-cols-4">
+                {stats.map((stat) => (
+                  <StatCard key={stat.label} {...stat} />
+                ))}
+              </div>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         <section id="servicos" className="scroll-mt-28 pb-10">
-          <div className="glass-card glow-border rounded-[2rem] px-4 py-8 sm:px-6 lg:px-8">
-            <SectionTitle
-              eyebrow="Serviços"
-              title="SERVIÇOS QUE EU OFEREÇO"
-              subtitle="Atendimento pensado para resolver com rapidez, cuidado e transparência."
-            />
-            <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-5">
-              {services.map((service) => (
-                <ServiceCard key={service.title} {...service} />
-              ))}
+          <Reveal>
+            <div className="glass-card glow-border rounded-[2rem] px-4 py-8 sm:px-6 lg:px-8">
+              <SectionTitle
+                eyebrow="Serviços"
+                title="SERVIÇOS QUE EU OFEREÇO"
+                subtitle="Atendimento pensado para resolver com rapidez, cuidado e transparência."
+              />
+              <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-5">
+                {services.map((service) => (
+                  <ServiceCard key={service.title} {...service} />
+                ))}
+              </div>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         <section className="pb-10">
-          <div className="glass-card glow-border rounded-[2rem] px-4 py-8 sm:px-6 lg:px-8">
-            <SectionTitle
-              eyebrow="Diagnóstico"
-              title="DIAGNÓSTICO COMPLETO"
-              subtitle="Monitoramento visual para mostrar, de forma clara, onde o sistema está pedindo atenção."
-            />
-            <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="space-y-5 rounded-3xl border border-white/8 bg-black/20 p-6">
-                <div className="flex items-center justify-between">
-                  <p className="title-display text-lg font-bold uppercase tracking-[0.08em] text-white">
-                    Status do sistema
-                  </p>
-                  <CircleGauge className="h-5 w-5 text-[#ffd23f]" />
+          <Reveal>
+            <div className="glass-card glow-border rounded-[2rem] px-4 py-8 sm:px-6 lg:px-8">
+              <SectionTitle
+                eyebrow="Diagnóstico"
+                title="DIAGNÓSTICO COMPLETO"
+                subtitle="Monitoramento visual para mostrar, de forma clara, onde o sistema está pedindo atenção."
+              />
+              <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+                <div className="interactive-glow space-y-5 rounded-3xl border border-white/8 bg-black/20 p-6">
+                  <div className="flex items-center justify-between">
+                    <p className="title-display text-lg font-bold uppercase tracking-[0.08em] text-white">
+                      Status do sistema
+                    </p>
+                    <CircleGauge className="h-5 w-5 text-[#ffd23f]" />
+                  </div>
+                  <div className="space-y-4">
+                    {diagnosticMetrics.map((metric) => (
+                      <Bar key={metric.label} {...metric} />
+                    ))}
+                  </div>
                 </div>
-                <div className="space-y-4">
-                  {diagnosticMetrics.map((metric) => (
-                    <Bar key={metric.label} {...metric} />
-                  ))}
-                </div>
-              </div>
 
-              <div className="glass-card glow-border flex h-full flex-col justify-between rounded-3xl p-6">
-                <div className="space-y-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
-                    Situação
-                  </p>
-                  <h3 className="title-display text-3xl font-black uppercase text-[#ffcf1d]">
-                    Atenção
-                  </h3>
-                  <p className="text-sm leading-7 text-slate-300">
-                    Seu sistema pode estar com desempenho abaixo do ideal.
-                  </p>
+                <div className="interactive-glow glass-card glow-border flex h-full flex-col justify-between rounded-3xl p-6">
+                  <div className="space-y-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">
+                      Situação
+                    </p>
+                    <h3 className="title-display text-3xl font-black uppercase text-[#ffcf1d]">
+                      Atenção
+                    </h3>
+                    <p className="text-sm leading-7 text-slate-300">
+                      Seu sistema pode estar com desempenho abaixo do ideal.
+                    </p>
+                  </div>
+                  <ActionButton
+                    href="https://wa.me/5551995295557?text=Olá%20Tigas%20Tech,%20preciso%20de%20uma%20análise%20do%20meu%20computador."
+                    tone="outline"
+                    icon={ScanSearch}
+                    className="mt-8"
+                  >
+                    Solicitar análise
+                  </ActionButton>
                 </div>
-                <ActionButton
-                  href="https://wa.me/5551995295557?text=Olá%20Tigas%20Tech,%20preciso%20de%20uma%20análise%20do%20meu%20computador."
-                  tone="outline"
-                  icon={ScanSearch}
-                  className="mt-8"
-                >
-                  Solicitar análise
-                </ActionButton>
               </div>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         <section id="sobre" className="scroll-mt-28 pb-10">
-          <div className="glass-card glow-border rounded-[2rem] p-4 sm:p-6 lg:p-8">
-            <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-              <PortraitPlaceholder />
-              <div className="space-y-6">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-300/80">
-                    Sobre mim
+          <Reveal>
+            <div className="glass-card glow-border rounded-[2rem] p-4 sm:p-6 lg:p-8">
+              <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+                <PortraitPlaceholder />
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-300/80">
+                      Sobre mim
+                    </p>
+                    <h2 className="title-display mt-3 text-3xl font-extrabold uppercase leading-tight sm:text-4xl">
+                      Paixão por tecnologia.
+                      <br />
+                      Foco em pessoas.
+                    </h2>
+                  </div>
+                  <p className="max-w-2xl text-base leading-8 text-slate-300">
+                    Trabalho com informática desde cedo e acredito que a tecnologia deve facilitar a vida
+                    das pessoas. Meu compromisso é entregar soluções eficientes, com transparência e
+                    qualidade.
                   </p>
-                  <h2 className="title-display mt-3 text-3xl font-extrabold uppercase leading-tight sm:text-4xl">
-                    Paixão por tecnologia.
-                    <br />
-                    Foco em pessoas.
-                  </h2>
+                  <BadgeList />
                 </div>
-                <p className="max-w-2xl text-base leading-8 text-slate-300">
-                  Trabalho com informática desde cedo e acredito que a tecnologia deve facilitar a vida
-                  das pessoas. Meu compromisso é entregar soluções eficientes, com transparência e
-                  qualidade.
-                </p>
-                <BadgeList />
               </div>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         <section className="pb-10">
-          <div className="glass-card glow-border rounded-[2rem] px-4 py-8 sm:px-6 lg:px-8">
-            <SectionTitle eyebrow="Comparativo" title="ANTES E DEPOIS" />
-            <div className="mt-8 grid gap-5 lg:grid-cols-[1fr_auto_1fr] lg:items-stretch">
-              <article className="rounded-[2rem] border border-red-500/35 bg-[linear-gradient(180deg,rgba(72,12,12,0.34),rgba(6,9,17,0.88))] p-6">
+          <Reveal>
+            <div className="glass-card glow-border rounded-[2rem] px-4 py-8 sm:px-6 lg:px-8">
+              <SectionTitle eyebrow="Comparativo" title="ANTES E DEPOIS" />
+              <div className="mt-8 grid gap-5 lg:grid-cols-[1fr_auto_1fr] lg:items-stretch">
+                <article className="interactive-glow rounded-[2rem] border border-red-500/35 bg-[linear-gradient(180deg,rgba(72,12,12,0.34),rgba(6,9,17,0.88))] p-6">
                 <p className="title-display text-sm font-bold uppercase tracking-[0.3em] text-red-300">
                   Antes
                 </p>
@@ -502,15 +549,15 @@ function App() {
                     Sistema travado
                   </div>
                 </div>
-              </article>
+                </article>
 
-              <div className="hidden items-center justify-center lg:flex">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#ffd23f]/35 bg-[#ffd23f]/10 text-[#ffd23f]">
-                  <ChevronRight className="h-7 w-7" />
+                <div className="hidden items-center justify-center lg:flex">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#ffd23f]/35 bg-[#ffd23f]/10 text-[#ffd23f]">
+                    <ChevronRight className="h-7 w-7" />
+                  </div>
                 </div>
-              </div>
 
-              <article className="rounded-[2rem] border border-lime-400/30 bg-[linear-gradient(180deg,rgba(18,66,24,0.34),rgba(6,9,17,0.88))] p-6">
+                <article className="interactive-glow rounded-[2rem] border border-lime-400/30 bg-[linear-gradient(180deg,rgba(18,66,24,0.34),rgba(6,9,17,0.88))] p-6">
                 <p className="title-display text-sm font-bold uppercase tracking-[0.3em] text-lime-300">
                   Depois
                 </p>
@@ -529,90 +576,97 @@ function App() {
                     Sistema pronto
                   </div>
                 </div>
-              </article>
+                </article>
+              </div>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         <section id="bancada" className="scroll-mt-28 pb-10">
-          <div className="glass-card glow-border rounded-[2rem] px-4 py-8 sm:px-6 lg:px-8">
-            <SectionTitle
-              eyebrow="Estrutura"
-              title="MINHA BANCADA"
-              subtitle="Equipamentos profissionais para um serviço de qualidade."
-            />
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-              {workbench.map((item) => (
-                <div
-                  key={item.label}
-                  className="group rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-white/[0.05]"
-                >
-                  <div className="flex h-20 items-center justify-center rounded-2xl border border-cyan-300/10 bg-[linear-gradient(180deg,rgba(11,18,31,0.95),rgba(4,8,14,0.98))]">
-                    <item.icon className="h-10 w-10 text-[#ffd23f] transition-transform group-hover:scale-110" />
+          <Reveal>
+            <div className="glass-card glow-border rounded-[2rem] px-4 py-8 sm:px-6 lg:px-8">
+              <SectionTitle
+                eyebrow="Estrutura"
+                title="MINHA BANCADA"
+                subtitle="Equipamentos profissionais para um serviço de qualidade."
+              />
+              <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+                {workbench.map((item) => (
+                  <div
+                    key={item.label}
+                    className="interactive-glow group rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-300/30 hover:bg-white/[0.05]"
+                  >
+                    <div className="flex h-20 items-center justify-center rounded-2xl border border-cyan-300/10 bg-[linear-gradient(180deg,rgba(11,18,31,0.95),rgba(4,8,14,0.98))]">
+                      <item.icon className="h-10 w-10 text-[#ffd23f] transition-transform group-hover:scale-110" />
+                    </div>
+                    <p className="mt-4 text-center text-xs font-bold uppercase tracking-[0.18em] text-slate-200">
+                      {item.label}
+                    </p>
                   </div>
-                  <p className="mt-4 text-center text-xs font-bold uppercase tracking-[0.18em] text-slate-200">
-                    {item.label}
-                  </p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         <section id="depoimentos" className="scroll-mt-28 pb-10">
-          <div className="glass-card glow-border rounded-[2rem] px-4 py-8 sm:px-6 lg:px-8">
-            <SectionTitle
-              eyebrow="Prova social"
-              title="DEPOIMENTOS"
-              subtitle="Resultados percebidos por clientes que queriam sair do zero lento para o dia a dia funcionando de verdade."
-            />
-            <div className="mt-8 grid gap-5 lg:grid-cols-3">
-              {testimonials.map((item) => (
-                <article
-                  key={item.author}
-                  className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 transition-transform duration-300 hover:-translate-y-1"
-                >
-                  <StarRow />
-                  <p className="mt-5 text-sm leading-7 text-slate-200">“{item.text}”</p>
-                  <div className="mt-6 flex items-center justify-between gap-4">
-                    <div>
-                      <p className="text-sm font-semibold text-white">{item.author}</p>
+          <Reveal>
+            <div className="glass-card glow-border rounded-[2rem] px-4 py-8 sm:px-6 lg:px-8">
+              <SectionTitle
+                eyebrow="Prova social"
+                title="DEPOIMENTOS"
+                subtitle="Resultados percebidos por clientes que queriam sair do zero lento para o dia a dia funcionando de verdade."
+              />
+              <div className="mt-8 grid gap-5 lg:grid-cols-3">
+                {testimonials.map((item) => (
+                  <article
+                    key={item.author}
+                    className="interactive-glow rounded-3xl border border-white/10 bg-white/[0.03] p-6 transition-transform duration-300 hover:-translate-y-1"
+                  >
+                    <StarRow />
+                    <p className="mt-5 text-sm leading-7 text-slate-200">“{item.text}”</p>
+                    <div className="mt-6 flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-sm font-semibold text-white">{item.author}</p>
+                      </div>
+                      <MessageCircleMore className="h-5 w-5 text-[#ffd23f]" />
                     </div>
-                    <MessageCircleMore className="h-5 w-5 text-[#ffd23f]" />
-                  </div>
-                </article>
-              ))}
+                  </article>
+                ))}
+              </div>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         <section id="contato" className="scroll-mt-28 pb-10">
-          <div className="glow-border rounded-[2.4rem] border border-[#f0bf26]/32 bg-[linear-gradient(180deg,rgba(11,18,30,0.94),rgba(4,7,13,0.98))] p-4 shadow-[0_0_40px_rgba(255,198,35,0.08)] sm:p-6 lg:p-8">
-            <div className="grid gap-8 lg:grid-cols-[1.2fr_auto] lg:items-center">
-              <div className="space-y-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-yellow-300/80">
-                  Chamada final
-                </p>
-                <h2 className="title-display text-4xl font-black uppercase leading-[0.96] sm:text-5xl">
-                  VAMOS RESOLVER
-                  <br />
-                  ISSO AGORA!
-                </h2>
-                <p className="text-base leading-7 text-slate-300">
-                  Fale comigo no WhatsApp e solicite uma avaliação.
-                </p>
-              </div>
+          <Reveal>
+            <div className="glow-border rounded-[2.4rem] border border-[#f0bf26]/32 bg-[linear-gradient(180deg,rgba(11,18,30,0.94),rgba(4,7,13,0.98))] p-4 shadow-[0_0_40px_rgba(255,198,35,0.08)] sm:p-6 lg:p-8">
+              <div className="grid gap-8 lg:grid-cols-[1.2fr_auto] lg:items-center">
+                <div className="space-y-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-yellow-300/80">
+                    Chamada final
+                  </p>
+                  <h2 className="title-display text-4xl font-black uppercase leading-[0.96] sm:text-5xl">
+                    VAMOS RESOLVER
+                    <br />
+                    ISSO AGORA!
+                  </h2>
+                  <p className="text-base leading-7 text-slate-300">
+                    Fale comigo no WhatsApp e solicite uma avaliação.
+                  </p>
+                </div>
 
-              <ActionButton
-                href="https://wa.me/5551995295557?text=Olá%20Tigas%20Tech,%20quero%20agendar%20uma%20avaliação."
-                tone="yellow"
-                icon={PhoneCall}
-                className="justify-self-start px-7 py-4 text-base sm:justify-self-end"
-              >
-                CHAMAR NO WHATSAPP
-              </ActionButton>
+                <ActionButton
+                  href="https://wa.me/5551995295557?text=Olá%20Tigas%20Tech,%20quero%20agendar%20uma%20avaliação."
+                  tone="yellow"
+                  icon={PhoneCall}
+                  className="justify-self-start px-7 py-4 text-base sm:justify-self-end"
+                >
+                  CHAMAR NO WHATSAPP
+                </ActionButton>
+              </div>
             </div>
-          </div>
+          </Reveal>
         </section>
       </main>
 
@@ -651,4 +705,7 @@ function App() {
 }
 
 export default App;
+
+
+
 
