@@ -89,7 +89,7 @@ const diagnosticMetrics = [
   { label: "CPU", value: 75, tone: "blue" },
   { label: "Memória RAM", value: 82, tone: "blue" },
   { label: "Armazenamento", value: 65, tone: "yellow" },
-  { label: "Temperatura", value: 68, tone: "green", suffix: "Â°C" },
+  { label: "Temperatura", value: 68, tone: "green", suffix: "°C" },
   { label: "Rede", value: 98, tone: "blue" },
 ];
 
