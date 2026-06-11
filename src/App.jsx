@@ -634,10 +634,15 @@ function App() {
             <PhoneCall className="h-4 w-4 text-[#ffd23f]" />
             WhatsApp: (51) 99529-5557
           </a>
-          <div className="inline-flex items-center gap-2">
+          <a
+            href="https://www.instagram.com/tigastech/"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 transition-colors hover:text-[#ffd23f]"
+          >
             <Camera className="h-4 w-4 text-[#ffd23f]" />
             Instagram: @tigastech
-          </div>
+          </a>
           <div className="inline-flex items-center gap-2 justify-self-start lg:justify-self-end">
             <MapPin className="h-4 w-4 text-[#ffd23f]" />
             Location: Rio Grande do Sul
