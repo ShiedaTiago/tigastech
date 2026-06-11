@@ -180,6 +180,38 @@ body {
   transform: translateY(0);
 }
 
+.pc-hero .pc-hero-frame {
+  transition:
+    transform 260ms ease,
+    box-shadow 260ms ease,
+    border-color 260ms ease,
+    filter 260ms ease;
+  transform: translateY(0) scale(1);
+  will-change: transform, box-shadow, border-color, filter;
+}
+
+.pc-hero .pc-hero-image {
+  transition: transform 320ms ease, filter 320ms ease;
+  transform: scale(1);
+}
+
+.pc-hero:hover .pc-hero-frame,
+.pc-hero:focus-within .pc-hero-frame {
+  transform: translateY(-4px) scale(1.015);
+  border-color: rgba(67, 154, 255, 0.38);
+  box-shadow:
+    0 0 0 1px rgba(67, 154, 255, 0.16),
+    0 22px 58px rgba(0, 0, 0, 0.44),
+    0 0 30px rgba(34, 111, 255, 0.22);
+  filter: saturate(1.05);
+}
+
+.pc-hero:hover .pc-hero-image,
+.pc-hero:focus-within .pc-hero-image {
+  transform: scale(1.03);
+  filter: drop-shadow(0 0 38px rgba(28, 122, 255, 0.34));
+}
+
 @media (max-width: 640px) {
   .title-display {
     letter-spacing: 0.01em;
@@ -206,6 +238,19 @@ body {
   .interactive-glow:focus-visible,
   .interactive-glow:active {
     transform: none;
+  }
+
+  .pc-hero .pc-hero-frame,
+  .pc-hero .pc-hero-image {
+    transition: none;
+  }
+
+  .pc-hero:hover .pc-hero-frame,
+  .pc-hero:focus-within .pc-hero-frame,
+  .pc-hero:hover .pc-hero-image,
+  .pc-hero:focus-within .pc-hero-image {
+    transform: none;
+    filter: none;
   }
 }
 

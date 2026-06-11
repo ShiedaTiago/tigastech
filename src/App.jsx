@@ -15,6 +15,7 @@ import {
   MessageCircleMore,
   MonitorSmartphone,
   Microscope,
+  Menu,
   PhoneCall,
   ScanSearch,
   ServerCog,
@@ -24,6 +25,7 @@ import {
   Star,
   Wrench,
   Wifi,
+  X,
 } from "lucide-react";
 
 const navItems = [
@@ -279,20 +281,20 @@ function Reveal({ children, className = "", delay = 0 }) {
 
 function PcIllustration() {
   return (
-    <div className="interactive-glow relative mx-auto flex w-full max-w-[560px] justify-center">
+    <div className="pc-hero relative mx-auto flex w-full max-w-[560px] justify-center rounded-[2.35rem]">
       <div className="absolute inset-x-12 bottom-0 h-24 rounded-full bg-blue-500/16 blur-3xl" />
       <div className="absolute right-8 top-12 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl" />
       <div className="relative w-full max-w-[540px] pt-4">
         <div className="absolute left-1/2 top-0 h-10 w-[72%] -translate-x-1/2 rounded-full bg-black/45 blur-2xl" />
-        <div className="relative mx-auto w-full overflow-hidden rounded-[2.35rem] border border-cyan-300/14 bg-[linear-gradient(180deg,rgba(8,14,24,0.96),rgba(2,4,8,0.98))] p-4 shadow-[0_34px_100px_rgba(0,0,0,0.62)]">
+        <div className="pc-hero-frame relative mx-auto w-full overflow-hidden rounded-[2.35rem] border border-cyan-300/14 bg-[linear-gradient(180deg,rgba(8,14,24,0.96),rgba(2,4,8,0.98))] p-2.5 shadow-[0_34px_100px_rgba(0,0,0,0.62)] sm:p-4">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(0,122,255,0.22),transparent_24%),radial-gradient(circle_at_80%_0%,rgba(0,255,255,0.16),transparent_18%),linear-gradient(180deg,transparent,rgba(0,0,0,0.22))]" />
           <img
             src="/hero-pc.png"
             alt="Gabinete gamer premium com iluminação azul"
-            className="relative z-10 h-auto w-full select-none object-contain drop-shadow-[0_0_34px_rgba(28,122,255,0.28)]"
+            className="pc-hero-image relative z-10 h-auto w-full select-none object-contain object-center drop-shadow-[0_0_34px_rgba(28,122,255,0.28)]"
           />
           <div className="absolute inset-x-8 bottom-4 z-20 h-6 rounded-full bg-cyan-400/12 blur-2xl" />
-          <div className="absolute inset-x-16 bottom-2 z-20 h-2 rounded-full bg-gradient-to-r from-blue-500/20 via-cyan-300/70 to-yellow-300/20 blur-[6px]" />
+          <div className="absolute inset-x-16 bottom-2 z-20 h-2 rounded-full bg-gradient-to-r from-blue-500/20 via-cyan-300/70 to-blue-300/40 blur-[6px]" />
         </div>
       </div>
     </div>
@@ -348,9 +350,53 @@ function StarRow() {
 }
 
 function App() {
+  const [headerVisible, setHeaderVisible] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      const scrollingDown = currentY > lastScrollY.current + 8;
+      const scrollingUp = currentY < lastScrollY.current - 8;
+
+      if (currentY < 80) {
+        setHeaderVisible(true);
+      } else if (scrollingDown) {
+        setHeaderVisible(false);
+      } else if (scrollingUp) {
+        setHeaderVisible(true);
+      }
+
+      lastScrollY.current = currentY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      return undefined;
+    }
+
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [mobileMenuOpen]);
+
   return (
     <div className="tech-shell min-h-screen bg-transparent text-white">
-      <header className="sticky top-0 z-50 border-b border-white/8 bg-[#050910]/82 backdrop-blur-xl">
+      <header
+        className={`sticky top-0 z-50 border-b border-white/8 bg-[#050910]/82 backdrop-blur-xl transition-transform duration-300 will-change-transform ${
+          headerVisible ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
         <div className="mx-auto flex max-w-[1400px] flex-col gap-4 px-4 py-4 sm:px-6 lg:px-8 xl:flex-row xl:items-center xl:justify-between">
           <a href="#inicio" className="flex items-center gap-3">
             <div className="soft-shadow flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-[#f0bf26]/35 bg-[linear-gradient(180deg,rgba(255,202,31,0.13),rgba(8,13,22,0.95))] p-1">
@@ -368,7 +414,7 @@ function App() {
             </div>
           </a>
 
-          <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-semibold uppercase tracking-[0.16em] text-slate-200">
+          <nav className="hidden flex-wrap items-center gap-x-6 gap-y-2 text-sm font-semibold uppercase tracking-[0.16em] text-slate-200 xl:flex">
             {navItems.map((item) => (
               <a
                 key={item.label}
@@ -380,9 +426,52 @@ function App() {
             ))}
           </nav>
 
-          <ActionButton href="#contato" tone="yellow" icon={ArrowRight} className="xl:ml-4">
-            Orçamento
-          </ActionButton>
+          <div className="flex items-center gap-3 xl:ml-4">
+            <ActionButton href="#contato" tone="yellow" icon={ArrowRight} className="hidden xl:inline-flex">
+              Orçamento
+            </ActionButton>
+            <button
+              type="button"
+              aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+              aria-expanded={mobileMenuOpen}
+              onClick={() => setMobileMenuOpen((value) => !value)}
+              className="interactive-glow inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/12 bg-white/[0.04] text-white transition-colors hover:text-[#ffd23f] xl:hidden"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
+        </div>
+
+        <div
+          className={`overflow-hidden border-t border-white/8 bg-[#050910]/96 transition-[max-height,opacity,transform] duration-300 xl:hidden ${
+            mobileMenuOpen
+              ? "max-h-[28rem] opacity-100 translate-y-0"
+              : "pointer-events-none max-h-0 opacity-0 -translate-y-2"
+          }`}
+        >
+          <div className="mx-auto flex max-w-[1400px] flex-col gap-3 px-4 py-4 sm:px-6">
+            <nav className="grid gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-slate-200">
+              {navItems.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="interactive-glow rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 transition-colors hover:border-[#ffd23f]/30 hover:text-[#ffd23f]"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+
+            <ActionButton
+              href="#contato"
+              tone="yellow"
+              icon={ArrowRight}
+              className="w-full justify-center"
+            >
+              Orçamento
+            </ActionButton>
+          </div>
         </div>
       </header>
 
