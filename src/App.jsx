@@ -353,8 +353,12 @@ function App() {
       <header className="sticky top-0 z-50 border-b border-white/8 bg-[#050910]/82 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1400px] flex-col gap-4 px-4 py-4 sm:px-6 lg:px-8 xl:flex-row xl:items-center xl:justify-between">
           <a href="#inicio" className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#f0bf26]/30 bg-[linear-gradient(180deg,rgba(255,202,31,0.13),rgba(8,13,22,0.95))] text-[#ffd73a] soft-shadow">
-              <span className="title-display text-base font-bold">TT</span>
+            <div className="soft-shadow flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-[#f0bf26]/35 bg-[linear-gradient(180deg,rgba(255,202,31,0.13),rgba(8,13,22,0.95))] p-1">
+              <img
+                src="/tigas-logo.png"
+                alt="Logo da Tigas Tech"
+                className="h-full w-full rounded-full object-cover"
+              />
             </div>
             <div>
               <p className="title-display text-2xl font-bold tracking-[0.08em] text-white">
