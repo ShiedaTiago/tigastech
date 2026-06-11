@@ -263,21 +263,18 @@ function PcIllustration() {
 
 function PortraitPlaceholder() {
   return (
-    <div className="relative flex min-h-[320px] items-end overflow-hidden rounded-[2rem] border border-cyan-400/10 bg-[linear-gradient(180deg,rgba(14,23,40,0.92),rgba(4,9,16,0.96))] p-6">
-      <div className="absolute inset-0 floating-grid opacity-35" />
-      <div className="absolute left-1/2 top-8 h-40 w-40 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(29,119,255,0.45),transparent_70%)] blur-2xl" />
-      <div className="relative mx-auto flex h-72 w-full max-w-[340px] items-end justify-center">
-        <div className="absolute inset-x-6 bottom-0 h-44 rounded-[2rem] bg-[linear-gradient(180deg,rgba(18,28,46,0.55),rgba(4,8,14,0.94))] ring-1 ring-white/8 shadow-[0_20px_60px_rgba(0,0,0,0.45)]" />
-        <div className="absolute inset-x-10 bottom-3 h-36 rounded-[1.6rem] border border-white/6 bg-black/15" />
+    <div className="relative overflow-hidden rounded-[2rem] border border-cyan-400/10 bg-[linear-gradient(180deg,rgba(14,23,40,0.92),rgba(4,9,16,0.96))] p-4 sm:p-5">
+      <div className="absolute inset-0 floating-grid opacity-25" />
+      <div className="absolute left-1/2 top-10 h-40 w-40 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(29,119,255,0.32),transparent_70%)] blur-2xl" />
+      <div className="relative overflow-hidden rounded-[1.7rem] border border-white/8 bg-[linear-gradient(180deg,rgba(8,14,24,0.88),rgba(2,5,10,0.96))] shadow-[0_24px_70px_rgba(0,0,0,0.45)]">
         <img
           src="/tigas-photo.jpg"
           alt="Foto de Tigas Tech"
-          className="relative z-10 h-[292px] w-[240px] rounded-[1.5rem] object-cover object-[50%_18%] shadow-[0_24px_60px_rgba(0,0,0,0.45)]"
+          className="h-[420px] w-full object-cover object-[50%_18%] sm:h-[460px]"
         />
-        <div className="absolute bottom-3 h-28 w-64 rounded-[2rem] bg-[linear-gradient(180deg,rgba(12,15,22,0.15),rgba(4,8,12,0.92))]" />
-        <div className="absolute bottom-0 h-24 w-72 rounded-[2rem] border border-cyan-300/10 bg-black/25 backdrop-blur-sm" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(180deg,transparent,rgba(4,8,14,0.92))]" />
       </div>
-      <div className="relative w-full rounded-2xl border border-white/8 bg-black/20 px-4 py-3 text-center text-xs uppercase tracking-[0.24em] text-cyan-200">
+      <div className="relative mt-4 rounded-2xl border border-white/8 bg-black/20 px-4 py-3 text-center text-xs uppercase tracking-[0.24em] text-cyan-200">
         foto real do técnico
       </div>
     </div>
