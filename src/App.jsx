@@ -462,15 +462,6 @@ function App() {
                 </a>
               ))}
             </nav>
-
-            <ActionButton
-              href="#contato"
-              tone="yellow"
-              icon={ArrowRight}
-              className="w-full justify-center"
-            >
-              Orçamento
-            </ActionButton>
           </div>
         </div>
       </header>
@@ -487,7 +478,7 @@ function App() {
               <h1 className="title-display max-w-4xl text-[clamp(2.7rem,10vw,4.95rem)] font-extrabold uppercase leading-[0.92] tracking-[0.03em] text-white sm:text-6xl">
                 TECNOLOGIA
                 <br />
-                QUE FUNCIONA.
+                QUE FUNCIONA
                 <br />
                 <span className="text-[#ffcf1d] neon-text">DE VERDADE.</span>
               </h1>
